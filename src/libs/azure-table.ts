@@ -7,6 +7,11 @@ export interface AzureTableEntityBase {
 
 export type InferAzureTable<T> = T extends AzureTable<infer U> ? U : never;
 
+export interface EntityKeyGenerator {
+  getPartitionKey: () => string;
+  getRowKey: () => string;
+}
+
 /**
  * Generic Azure Table class
  */
@@ -43,11 +48,7 @@ export class AzureTable<TEntity extends AzureTableEntityBase> {
     queryOptions?: ListTableEntitiesOptions['queryOptions'],
     listTableEntitiesOptions?: Omit<ListTableEntitiesOptions, 'queryOptions'>
   ) {
-    const entities = this.client.listEntities<TEntity>({
-      ...listTableEntitiesOptions,
-      queryOptions,
-    });
-
+    const entities = this.list(queryOptions, listTableEntitiesOptions);
     const result = [];
     // List all the entities in the table
     for await (const entity of entities) {
@@ -55,6 +56,21 @@ export class AzureTable<TEntity extends AzureTableEntityBase> {
     }
     return result;
   }
+
+  async count(
+    queryOptions?: ListTableEntitiesOptions['queryOptions'],
+    listTableEntitiesOptions?: Omit<ListTableEntitiesOptions, 'queryOptions'>
+  ) {
+    let count = 0;
+    const entities = this.list(queryOptions, listTableEntitiesOptions);
+    // List all the entities in the table
+    for await (const _ of entities) {
+      count++;
+    }
+    return count;
+  }
+
+  
 
   async insert(entity: TEntity) {
     return this.client.createEntity<TEntity>(entity);

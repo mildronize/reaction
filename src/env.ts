@@ -4,8 +4,8 @@ import { z } from 'zod';
 import 'dotenv/config';
 import { AzureTable } from './libs/azure-table';
 import { TableClient } from '@azure/data-tables';
-import { CountsEntity } from './entities/counts.entity';
-import { ReactionEntity } from './entities/reactions.entity';
+import { ICountsEntity } from './entities/counts.entity';
+import { IReactionEntity } from './entities/reactions.entity';
 
 function validateStringArray(name: string, value: unknown): string[] {
   if (typeof value !== 'string') throw new Error(`${name} is required`);
@@ -26,10 +26,10 @@ export const environmentSchema = z.object({
 const env = environmentSchema.parse(process.env);
 
 export const azureTableClient = {
-  counts: new AzureTable<CountsEntity>(
+  counts: new AzureTable<ICountsEntity>(
     TableClient.fromConnectionString(env.AZURE_TABLE_CONNECTION_STRING, `${env.AZURE_TABLE_PREFIX}Counts`)
   ),
-  reactions: new AzureTable<ReactionEntity>(
+  reactions: new AzureTable<IReactionEntity>(
     TableClient.fromConnectionString(env.AZURE_TABLE_CONNECTION_STRING, `${env.AZURE_TABLE_PREFIX}Reactions`)
   ),
 };

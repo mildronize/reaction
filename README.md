@@ -38,7 +38,13 @@ With this setup, you can deploy your own reaction endpoint on Azure.
     - Run `func azure functionapp publish <your-function-app-name>`
     - Your deployed endpoint will be available at `https://<your-function-app-name>.azurewebsites.net`
 
-6. In your zola site's `config.toml`:
+6. Config CORS on Azure Functions
+    - Go to your Azure Functions in the Azure Portal
+    - Click on `CORS` Left Menu
+    - Add your `<Frontend URL>` to the allowed origins
+    ![CORS](./docs/cors-in-azure-functions.jpg)
+
+7. In your zola site's `config.toml`:
     ```toml
     reaction = true
     reaction_align = "right"

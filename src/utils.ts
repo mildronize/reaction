@@ -13,3 +13,11 @@ export function getIpAddress(req: HonoRequest): string | null {
   }
   return xForwardedFor.split(':')[0];
 }
+
+
+export async function hashed(ip: string): Promise<string> {
+  const data = new TextEncoder().encode(ip);
+  const buf = await crypto.subtle.digest("SHA-256", data);
+  const hased = String.fromCharCode(...new Uint8Array(buf.slice(0, 16)));
+  return btoa(hased).replace(/=+$/, "");
+}

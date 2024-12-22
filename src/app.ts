@@ -1,10 +1,20 @@
+import { Hono } from "hono";
+import { cors } from "hono/cors";
+import { getIpAddress } from "./utils";
+import { parseEnvToVariables, HonoEnv } from "./env";
+import { secureHeaders } from 'hono/secure-headers';
 
-import { Hono } from 'hono'
-import { getIpAddress } from './utils';
-const app = new Hono().basePath('/api')
+const app = new Hono<HonoEnv>().basePath("/api");
 
-app.get('/', (c) => {
-  return c.text(`Hello Azure Functions! ${getIpAddress(c.req)}`);
-})
+app.use(parseEnvToVariables());
+app.use("*", (c, next) => {
+  const corsMiddlewareHandler = cors({ origin: c.var.ORIGINS });
+  return corsMiddlewareHandler(c, next);
+});
+app.use("*", secureHeaders());
+app.get("/", (c) => {
+  const origins = c.var.ORIGINS;
+  return c.text(`Hello Azure Functions! ${getIpAddress(c.req)} - s=> ${origins.join(", ")}`);
+});
 
-export default app
+export default app;

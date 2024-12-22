@@ -2,14 +2,13 @@
   "name": "",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/src/functions/*.js",
+  "main": "dist/main.js",
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
+    "build": "esbuild src/main.ts --bundle --platform=node --external:@azure/functions-core --outfile=dist/main.js",
+    "watch": "nodemon --watch src --ext ts --exec 'run-s build'",
     "clean": "rimraf dist",
-    "prestart": "npm run clean && npm run build",
-    "start": "func start",
-    "test": "echo \"No tests yet...\""
+    "start": "func host start",
+    "dev": "run-p watch start"
   },
   "dependencies": {
     "@azure/functions": "^4.6.0",
@@ -17,9 +16,12 @@
     "hono": "^4.6.14"
   },
   "devDependencies": {
-    "@types/node": "18.x",
     "azure-functions-core-tools": "^4.x",
-    "rimraf": "^5.0.0",
-    "typescript": "^4.0.0"
+    "@types/node": "^20.12.12",
+    "esbuild": "^0.21.3",
+    "nodemon": "^3.1.0",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^5.0.7",
+    "typescript": "^5.4.5"
   }
 }

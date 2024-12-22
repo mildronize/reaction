@@ -1,6 +1,15 @@
-import { httpTrigger} from "./functions/http-trigger";
+import { app } from "@azure/functions";
+import { azureHonoHandler } from "@marplex/hono-azurefunc-adapter";
+import honoApp from "./app";
 
-// Centralize imports for bundling
-export default {
-  httpTrigger
-};
+export const httpTrigger = app.http("httpTrigger", {
+  methods: [
+    "GET",
+    "POST",
+    "DELETE",
+    "PUT",
+  ],
+  authLevel: "anonymous",
+  route: "{*proxy}",
+  handler: azureHonoHandler(honoApp.fetch),
+});

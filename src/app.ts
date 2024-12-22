@@ -1,7 +1,10 @@
 
 import { Hono } from 'hono'
+import { getIpAddress } from './utils';
 const app = new Hono().basePath('/api')
 
-app.get('/', (c) => c.text('Hello Azure Functions! __'))
+app.get('/', (c) => {
+  return c.text(`Hello Azure Functions! ${getIpAddress(c.req)}`);
+})
 
 export default app

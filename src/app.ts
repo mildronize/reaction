@@ -38,20 +38,19 @@ app.get('/', async c => {
   const counts = new Map(countsResult.map((row) => [row.emoji, row.count]));
   const reacted = new Set(reactionsResult.map((row) => row.emoji));
 
-  // const reaction = Object.fromEntries(
-  //   valid[slug].map((emoji) => [emoji, [counts.get(emoji) || 0, reacted.has(emoji)]]),
-  // );
   const reaction = Object.fromEntries(
     c.var.EMOJIS.map((emoji) => [emoji, [counts.get(emoji) || 0, reacted.has(emoji)]]),
   );
 
   return c.json(reaction);
+});
 
-  // return c.text(`Hello Azure Functions! ${slug} ${uid} `);
-  // return c.json({
-  //   '👍': [123, true], // emoji: [count, reacted]
-  //   '👀': [456, false],
-  // });
+app.post('/', async c => {
+  const ip = getIpAddress(c.req);
+  return c.json({
+    "success": true,
+    "ip": ip,
+  });
 });
 
 export default app;

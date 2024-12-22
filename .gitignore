@@ -48,3 +48,4 @@ __queuestorage__
 __azurite_db*__.json
 
 bunsheet
+.DS_Store

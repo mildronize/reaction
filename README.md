@@ -50,7 +50,9 @@ With this setup, you can deploy your own reaction endpoint on Azure.
     reaction_align = "right"
     reaction_endpoint = "https://<your-function-app-name>.azurewebsites.net/api"
     ```
+## Examples
 
+- You can see the full example at my blog: https://github.com/mildronize/blog-v8
 
 ## Notes
 
